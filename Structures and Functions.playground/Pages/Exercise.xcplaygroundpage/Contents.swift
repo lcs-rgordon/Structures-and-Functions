@@ -109,6 +109,32 @@ func distance(from: Point, to: Point) -> Double {
     
 }
 
+/// Finds the shortest distance (perpendicular distance) from a point to a line.
+///
+/// - Parameters:
+///   - from: a point on a Cartesian plane
+///   - to: a line on a Cartesian plane
+/// - Returns: The distance
+func shortestDistance(from givenPoint: Point, to givenLine: Line) -> Double {
+    
+    // Get the slope of a line perpendicular to the road
+    let perpendicularM = getSlopeOfPerpendicularLine(from: givenLine)
+    
+    // Get the vertical intercept of a line perpendicular to the existing road
+    let perpendicularB = getVerticalIntercept(from: givenPoint, onLineWith: perpendicularM)
+    
+    // Define the line perpendicular to the existing road
+    let newLine = Line(slope: perpendicularM, verticalIntercept: perpendicularB)
+    
+    // Find the point of intersection between the two roads
+    let intersection = getPointOfIntersection(between: givenLine, and: newLine)
+    
+    // Now use the distance function to find the shortest route
+    let shortestDistance = distance(from: givenPoint, to: intersection)
+    
+    return shortestDistance
+}
+
 // Create a line instance (representing the road in this example)
 let m = Slope(rise: -1, run: 2)
 let existingRoad = Line(slope: m, verticalIntercept: 9.5)
@@ -116,17 +142,6 @@ let existingRoad = Line(slope: m, verticalIntercept: 9.5)
 // Create a point (the cabin site in this example)
 let cabinSite = Point(x: 6.0, y: 1.5)
 
-// Get the slope of a line perpendicular to the road
-let perpendicularM = getSlopeOfPerpendicularLine(from: existingRoad)
+// Find the shortest distance from the point to the line from the problem
+let distance = shortestDistance(from: cabinSite, to: existingRoad)
 
-// Get the vertical intercept of a line perpendicular to the existing road
-let perpendicularB = getVerticalIntercept(from: cabinSite, onLineWith: perpendicularM)
-
-// Define the line perpendicular to the existing road
-let newRoad = Line(slope: perpendicularM, verticalIntercept: perpendicularB)
-
-// Find the point of intersection between the two roads
-let intersectionOfRoads = getPointOfIntersection(between: existingRoad, and: newRoad)
-
-// Now use the distance function to find the shortest route
-let shortestDistance = distance(from: cabinSite, to: intersectionOfRoads)
